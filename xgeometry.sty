@@ -7,7 +7,7 @@
 % Loading the package
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplPackage{xgeometry}{2026-08-07}{0.0.0}
+\ProvidesExplPackage{xgeometry}{2026-08-08}{0.0.0}
   {LaTeX3 implementation of the geometry package}
 
 \msg_new:nnn { xgeometry } { l3kernel }
@@ -26,6 +26,11 @@
 
 % Define keys
 
+\keys_define:nn { xgeometry }
+  {
+      reset .code:n = { \__xgeometry_keys_set_initial: }
+    , reset .value_forbidden:n = true
+  }
 % paper
 \keys_define:nn { xgeometry / paper }
   {
