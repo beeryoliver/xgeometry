@@ -1,0 +1,194 @@
+\documentclass{beerydoc}
+
+
+\begin{document}
+
+
+\section*{\LARGE The \pkg{xgeometry} package}
+
+\LaTeX3 implementation of the \pkg{geometry} package
+
+Oliver Beery
+
+Version 0.0.0\quad 7 August 2026
+
+
+\section{Introduction}
+
+\subsection{Loading the package}
+\label{subsec:load}
+
+\listheading{Requirements:}
+\begin{itemize}
+  \item \LaTeXe{} version 2023-11-01 or newer
+  \item \pkg{l3kernel} version 2023-11-01 or newer
+\end{itemize}
+
+\subsection{Syntax}
+\label{subsec:syntax}
+
+This documentation uses the syntaxes \meta{dimen} and \meta{number}.
+These syntaxes have the same meaning as the arguments to \cs{dimeval} and
+\cs{fpeval}, respectively, which are documented in \pkg{usrguide}.
+
+
+\section{Keys}
+\label{sec:keys}
+
+\subsection{Setting \cs{paperwidth} and \cs{paperheight}}
+\label{subsec:paper}
+
+\begin{code}{paper/width}
+  \begin{syntax}
+    \key{paper/width=\meta{dimen}}
+  \end{syntax}
+  Sets \cs{paperwidth} to \meta{dimen}.
+  The initial value is \qty{21}{cm} (same as |A4|).
+\end{code}
+
+\begin{code}{paper/height}
+  \begin{syntax}
+    \key{paper/height=\meta{dimen}}
+  \end{syntax}
+  Sets \cs{paperheight} to \meta{dimen}.
+  The initial value is \qty{29.7}{cm} (same as |A4|).
+\end{code}
+
+\begin{code}{paper/flipped}
+  \begin{syntax}
+    \key{flipped=true|false}
+  \end{syntax}
+  Boolean key that sets whether to switch the values of \cs{paperwidth} and
+  \cs{paperheight}.
+  The initial value is |false|.
+\end{code}
+
+\subsection{Setting the body}
+\label{subsec:body}
+
+\begin{code}{body/width}
+  \begin{syntax}
+    \key{body/width=\meta{dimen}}
+  \end{syntax}
+  Sets the width of the body to \meta{dimen}.
+\end{code}
+
+\begin{code}{body/height}
+  \begin{syntax}
+    \key{body/height=\meta{dimen}}
+  \end{syntax}
+  Sets the height of the body to \meta{dimen}.
+\end{code}
+
+\begin{code}{body/width-paper-ratio}
+  \begin{syntax}
+    \key{body/width-paper-ratio=\meta{number}}
+  \end{syntax}
+  Sets the ratio of the body width to \cs{paperwidth} to \meta{number}.
+  The initial value is \meta{not set}.
+\end{code}
+
+\begin{code}{body/height-paper-ratio}
+  \begin{syntax}
+    \key{body/height-paper-ratio=\meta{number}}
+  \end{syntax}
+  Sets the ratio of the body height to \cs{paperheight} to \meta{number}.
+  The initial value is \meta{not set}.
+\end{code}
+
+\begin{code}{body/include-header}
+  \begin{syntax}
+    \key{body/include-header=true|false}
+  \end{syntax}
+  Boolean key that set whether the header is included as part of the body.
+  The initial value is |false|.
+\end{code}
+
+\begin{code}{body/include-footer}
+  \begin{syntax}
+    \key{body/include-footer=true|false}
+  \end{syntax}
+  Boolean key that set whether the footer is included as part of the body.
+  The initial value is |false|.
+\end{code}
+
+\begin{code}{body/include-margin-notes}
+  \begin{syntax}
+    \key{body/include-margin-notes=true|false}
+  \end{syntax}
+  Boolean key that set whether the margin notes are included as part of the
+  body.
+  The initial value is |false|.
+\end{code}
+
+\subsection{Setting the margins}
+\label{subsec:margins}
+
+\begin{code}{margin/top, margin/bottom, margin/left, margin/right}
+  \begin{syntax}
+    \key{margin/top=\meta{dimen}}
+  \end{syntax}
+  Sets the top, bottom, left, or right margin to \meta{dimen}.
+\end{code}
+
+\begin{code}{margin/all}
+  \begin{syntax}
+    \key{margin/all=\meta{dimen}}
+  \end{syntax}
+  Meta key that sets the following keys to \meta{dimen}:
+  \begin{itemize}
+    \item \key{margin/top}
+    \item \key{margin/bottom}
+    \item \key{margin/left}
+    \item \key{margin/right}
+  \end{itemize}
+\end{code}
+
+\begin{code}{margin/top-bottom-ratio}
+  \begin{syntax}
+    \key{margin/top-bottom-ratio=\meta{number}}
+  \end{syntax}
+  Sets the ratio of the top margin to the bottom margin to \meta{number}.
+  The initial value is \meta{not set}.
+\end{code}
+
+\begin{code}{margin/left-right-ratio}
+  \begin{syntax}
+    \key{margin/left-right-ratio=\meta{number}}
+  \end{syntax}
+  Sets the ratio of the left margin to the right margin to \meta{number}.
+  The initial value is \meta{not set}.
+\end{code}
+
+\section{Programming}
+
+\begin{code}{\l_xgeometry_paper_flipped_bool}
+  The value of the key \key{paper/flipped} (\S\ref{subsec:paper}).
+\end{code}
+
+\begin{code}
+  {
+    \l_xgeometry_body_include_header_bool,
+    \l_xgeometry_body_include_footer_bool,
+    \l_xgeometry_body_include_margin_notes_bool
+  }
+  The value of the keys \key{body/include-header}, \key{body/include-footer},
+  and \key{body/include-margin-notes} (\S\ref{subsec:body}).
+\end{code}
+
+\begin{code}
+  {
+    \xgeometry_margin_top:,
+    \xgeometry_margin_bottom:,
+    \xgeometry_margin_left:,
+    \xgeometry_margin_right:
+  }
+  Expands to the length of the top, bottom, left, or right margin.
+\end{code}
+
+\begin{code}{\xgeometry_body_width:, \xgeometry_body_height:}
+  Expands to the width or height of the body.
+\end{code}
+
+
+\end{document}

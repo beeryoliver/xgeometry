@@ -1,0 +1,229 @@
+% Package   : xgeometry -- LaTeX3 implementation of the geometry package
+% Copyright : 2026 (c) Oliver Beery <beeryoliver@gmail.com>
+% CTAN      :
+% Repository: https://github.com/beeryoliver/xgeometry
+% License   : The LaTeX Project Public License 1.3c
+
+% Loading the package
+
+\NeedsTeXFormat{LaTeX2e}[2023-11-01]
+\ProvidesExplPackage{xgeometry}{2026-08-07}{0.0.0}
+  {expl3 implementation of geometry}
+
+\msg_new:nnn { xgeometry } { l3kernel }
+  {
+    The~ xgeometry~ package~ could~ not~ load. \\
+    This~ package~ requires~
+    L3~ programming~ layer~ version~ 2023-11-01~ or~ newer.
+  }
+\IfExplAtLeastTF { 2023-11-01 } { }
+  { \msg_critical:nn { xgeometry } { l3kernel } }
+
+% Some variables
+
+% Scratch variable
+\fp_new:N \l__xgeometry_tmp_fp
+
+% Define keys
+
+% paper
+\keys_define:nn { xgeometry / paper }
+  {
+      width .dim_set:N = \paperwidth
+    , width .value_required:n = true
+
+    , height .dim_set:N = \paperheight
+    , height .value_required:n = true
+
+    , flipped .bool_set:N = \l_xgeometry_paper_flipped_bool
+    , flipped .value_required:n = true
+  }
+% body
+\keys_define:nn { geometry / body }
+  {
+      width .tl_set:N = \l__xgeometry_body_width_tl
+    , width .value_required:n = true
+
+    , height .tl_set:N = \l__xgeometry_body_height_tl
+    , height .value_required:n = true
+
+    , width-paper-ratio .tl_set:N = \l__xgeometry_body_width_paper_ratio_tl
+    , width-paper-ratio .value_required:n = true
+
+    , height-paper-ratio .tl_set:N = \l__xgeometry_body_height_paper_ratio_tl
+    , height-paper-ratio .value_required:n = true
+
+    , include-header .bool_set:N = \l_xgeometry_body_include_header_bool
+    , include-header .value_required:n = true
+
+    , include-footer .bool_set:N = \l_xgeometry_body_include_footer_bool
+    , include-footer .value_required:n = true
+
+    , include-margin-notes .bool_set:N =
+        \l_xgeometry_body_include_margin_notes_bool
+    , include-margin-notes .value_required:n = true
+  }
+% margins
+\keys_define:nn { xgeometry / margin }
+  {
+      top .tl_set:N = \l__xgeometry_margin_top_tl
+    , top .value_required:n = true
+
+    , bottom .tl_set:N = \l__xgeometry_margin_bottom_tl
+    , bottom .value_required:n = true
+
+    , left .tl_set:N = \l__xgeometry_margin_left_tl
+    , left .value_required:n = true
+
+    , right .tl_set:N = \l__xgeometry_margin_right_tl
+    , right .value_required:n = true
+
+    , all .code:n =
+        {
+          \tl_set:Nn \l__xgeometry_margin_top_tl {#1}
+          \tl_set:Nn \l__xgeometry_margin_bottom_tl {#1}
+          \tl_set:Nn \l__xgeometry_margin_left_tl {#1}
+          \tl_set:Nn \l__xgeometry_margin_right_tl {#1}
+        }
+    , all .value_required:n = true
+
+    , top-bottom-ratio .tl_set:N = \l__xgeometry_margin_top_bottom_ratio_tl
+    , top-bottom-ratio .value_required:n = true
+
+    , left-right-ratio .tl_set:N = \l__xgeometry_margin_left_right_ratio_tl
+    , left-right-ratio .value_required:n = true
+
+    % twoside , asymmetric , bindingoffset
+  }
+% LaTeX page layout parameters
+\cs_set:Npn \__xgeometry_tmp:n #1
+  {
+    , #1 .tl_set:N = \exp_not:c { l__xgeometry_#1_tl }
+    , #1 .value_required:n = true
+  }
+\keys_define:ne { xgeometry }
+  {
+    \tl_map_function:nN
+      {
+        {headheight} {headsep} {footskip}
+        {marginparsep} {marginparwidth}
+        {oddsidemargin} {evensidemargin}
+        % {paperheight} {paperwidth}
+        {textheight} {textwidth}
+        {topmargin}
+      }
+      \__xgeometry_tmp:n
+  }
+
+\cs_new_protected:Npn \__xgeometry_keys_set_initial:
+  {
+    \bool_set_false:N \l_xgeometry_paper_flipped_bool
+    \dim_set:Nn \paperwidth { 21cm }
+    \dim_set:Nn \paperheight { 29.7cm }
+
+    \bool_set_false:N \l_xgeometry_body_include_header_bool
+    \bool_set_false:N \l_xgeometry_body_include_footer_bool
+    \bool_set_false:N \l_xgeometry_body_include_margin_notes_bool
+  }
+\__xgeometry_keys_set_initial:
+
+\NewDocumentCommand \xgeometrysetup { m }
+  {
+    \mode_if_math:TF
+      { \msg_error:nn { xgeometry } { math-mode-invalid } { xgeometrysetup } }
+      { \__xgeometry_setup:n {#1} }
+  }
+\cs_mew_protected:Npn \__xgeometry_setup:n #1
+  {
+    \keys_set:nn { xgeometry } {#1}
+    \__xgeometry_keys_process:
+  }
+\cs_new_protected:Npn \__xgeometry_keys_process:
+  {
+    \__xgeometry_keys_process_start:
+    \__xgeometry_keys_process_end:
+    \prg_break_point:
+  }
+\cs_new_protected:Npn \__xgeometry_keys_process_start:
+  {
+    \quark_if_no_value:NF \l__xgeometry_bodywidth_paperwidth_ratio_tl
+      {
+        \fp_set:Nn \l__xgeometry_tmp_fp
+          { \l__xgeometry_body_width_paper_ratio_tl }
+        \tl_set:NV \l__xgeometry_body_width_paper_ratio_tl \l__xgeometry_tmp_fp
+        \fp_compare:nF { \c_zero_fp < \l__xgeometry_tmp_fp <= \c_one_fp }
+          {
+            \msg_error:nn { xgeometry } { body-width-paper-ratio-invalid }
+            \prg_break:
+          }
+      }
+    \quark_if_no_value:NF \l__xgeometry_bodyheight_paperheight_ratio_tl
+      {
+        \fp_set:Nn \l__xgeometry_tmp_fp
+          { \l__xgeometry_body_height_paper_ratio_tl }
+        \tl_set:NV \l__xgeometry_body_height_paper_ratio_tl
+          \l__xgeometry_tmp_fp
+        \fp_compare:nF { \c_zero_fp < \l__xgeometry_tmp_fp <= \c_one_fp }
+          {
+            \msg_error:nn { xgeometry } { body-height-paper-ratio-invalid }
+            \prg_break:
+          }
+      }
+  }
+\cs_new_protected:Npn \__xgeometry_keys_process_end:
+  {
+    \bool_if:NT \l_xgeometry_paper_flipped_bool
+      {
+        \use:e
+          {
+            \dim_set:Nn \exp_not:N \paperwidth { \dim_use:N \paperheight }
+            \dim_set:Nn \exp_not:N \paperheight { \dim_use:N \paperwidth }
+          }
+      }
+    \pdf_pagesize_gset:nn { \paperwidth } { \paperheight }
+    % ? \clearpage or \cleardoublepage
+  }
+
+\cs_new:Npn \xgeometry_body_width:
+  {
+
+  }
+\cs_new:Npn \xgeometry_body_height:
+  {
+
+  }
+\cs_new:Npn \xgeometry_margin_top:
+  {
+
+  }
+\cs_new:Npn \xgeometry_margin_bottom:
+  {
+
+  }
+\cs_new:Npn \xgeometry_margin_left:
+  {
+
+  }
+\cs_new:Npn \xgeometry_margin_right:
+  {
+
+  }
+
+% Messages
+
+\msg_new:nnn { xgeometry } { math-mode-invalid }
+  { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
+\msg_new:nnn { xgeometry } { body-width-paper-ratio-invalid }
+  {
+    Invalid~ value~ '\fp_to_tl:n \l__xgeometry_body_width_paper_ratio_tl'~
+    \msg_line_context:. \\
+    The~ value~ of~ the~ key~ 'body / width-paper-ratio'~ must~ be~ a~
+    positive~ number~ and~ less~ than~ 1.
+  }
+\msg_new:nnn { xgeometry } { body-height-paper-ratio-invalid }
+  {
+    Invalid~ value~ '\fp_to_tl:n \l__xgeometry_body_height_paper_ratio_tl'~
+    \msg_line_context:. \\
+    The~ value~ of~ the~ key~ 'body / height-paper-ratio'~ must~ be~ a~
+    positive~ number~ and~ less~ than~ 1.
+  }
