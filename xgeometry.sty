@@ -202,7 +202,7 @@
   {
 
   }
-\cs_new:Npn \xgeometry_margin_left: { \dim_use:N \oddsidemargin }
+\cs_new:Npn \xgeometry_margin_left: { \dim_eval:n { \oddsidemargin + 1in } }
 \cs_new:Npn \xgeometry_margin_right: { \dim_use:N \evensidemargin }
 
 % Messages
