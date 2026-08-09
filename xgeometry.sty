@@ -151,7 +151,7 @@
   }
 \cs_new_protected:Npn \__xgeometry_keys_process_start:
   {
-    \quark_if_no_value:NF \l__xgeometry_bodywidth_paperwidth_ratio_tl
+    \quark_if_no_value:NF \l__xgeometry_body_width_paper_ratio_tl
       {
         \fp_set:Nn \l__xgeometry_tmp_fp
           { \l__xgeometry_body_width_paper_ratio_tl }
@@ -162,7 +162,7 @@
             \prg_break:
           }
       }
-    \quark_if_no_value:NF \l__xgeometry_bodyheight_paperheight_ratio_tl
+    \quark_if_no_value:NF \l__xgeometry_body_height_paper_ratio_tl
       {
         \fp_set:Nn \l__xgeometry_tmp_fp
           { \l__xgeometry_body_height_paper_ratio_tl }
