@@ -233,7 +233,7 @@
     \dim_eval:n
       {
         \paperheight - 1in - \topmargin - \headheight - \headsep - \textheight
-        \bool_if:NF \l_xgeometry_body_include_footer_bool
+        \bool_if:NT \l_xgeometry_body_include_footer_bool
           { - \footskip }
       }
   }
