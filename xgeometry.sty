@@ -122,9 +122,9 @@
 
 \cs_new_protected:Npn \__xgeometry_keys_set_initial:
   {
-    \bool_set_false:N \l_xgeometry_paper_flipped_bool
     \dim_set:Nn \paperwidth { 21cm }
     \dim_set:Nn \paperheight { 29.7cm }
+    \bool_set_false:N \l_xgeometry_paper_flipped_bool
 
     \bool_set_false:N \l_xgeometry_body_include_header_bool
     \bool_set_false:N \l_xgeometry_body_include_footer_bool
@@ -197,22 +197,13 @@
   {
 
   }
-\cs_new:Npn \xgeometry_margin_top:
-  {
-
-  }
+\cs_new:Npn \xgeometry_margin_top: { \dim_eval:n { \topmargin + 1in } }
 \cs_new:Npn \xgeometry_margin_bottom:
   {
 
   }
-\cs_new:Npn \xgeometry_margin_left:
-  {
-
-  }
-\cs_new:Npn \xgeometry_margin_right:
-  {
-
-  }
+\cs_new:Npn \xgeometry_margin_left: { \dim_use:N \oddsidemargin }
+\cs_new:Npn \xgeometry_margin_right: { \dim_use:N \evensidemargin }
 
 % Messages
 
