@@ -219,7 +219,15 @@
           { + \footskip }
       }
   }
-\cs_new:Npn \xgeometry_margin_top: { \dim_eval:n { \topmargin + 1in } }
+\cs_new:Npn \xgeometry_margin_top:
+  {
+    \dim_eval:n
+      {
+        1in + \topmargin
+        \bool_if:NF \l_xgeometry_body_include_header_bool
+          { + \headheight + \headsep }
+      }
+  }
 \cs_new:Npn \xgeometry_margin_bottom:
   { \dim_eval:n { \paperheight - \textheight - \topmargin - 1in } }
 \cs_new:Npn \xgeometry_margin_left: { \dim_eval:n { \oddsidemargin + 1in } }
