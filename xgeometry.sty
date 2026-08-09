@@ -153,12 +153,12 @@
   {
     \dim_compare:nNnF \paperwidth > \c_zero_dim
       {
-        \msg_error:nn { xgeometry } { paper-width-invalid }
+        \msg_error:nn { xgeometry } { paperwidth-invalid }
         \prg_break:
       }
     \dim_compare:nNnF \paperheight > \c_zero_dim
       {
-        \msg_error:nn { xgeometry } { paper-height-invalid }
+        \msg_error:nn { xgeometry } { paperheight-invalid }
         \prg_break:
       }
     \quark_if_no_value:NF \l__xgeometry_body_width_paper_ratio_tl
@@ -229,13 +229,13 @@
 
 \msg_new:nnn { xgeometry } { math-mode-invalid }
   { '\iow_char:N \\ #1'~ invalid~ in~ math~ mode~ \msg_line_context:. }
-\msg_new:nnn { xgeometry } { paper-width-invalid }
+\msg_new:nnn { xgeometry } { paperwidth-invalid }
   {
     Invalid~ \iow_char:N \\ paperwidth~ '\dim_use:N \paperwidth'~
     \msg_line_context:. \\
     \iow_char:N \\ paperwidth~ must~ be~ a~ postiive~ length.
   }
-\msg_new:nnn { xgeometry } { paper-height-invalid }
+\msg_new:nnn { xgeometry } { paperheight-invalid }
   {
     Invalid~ \iow_char:N \\ paperheight~ '\dim_use:N \paperheight'~
     \msg_line_context:. \\
