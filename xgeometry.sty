@@ -191,11 +191,23 @@
 
 \cs_new:Npn \xgeometry_body_width:
   {
-
+    \dim_eval:n
+      {
+        \textwidth
+        \bool_if:NT \l_xgeometry_body_include_margin_notes_bool
+          { + \marginparsep + \marginparwidth }
+      }
   }
 \cs_new:Npn \xgeometry_body_height:
   {
-
+    \dim_eval:n
+      {
+        \textheight
+        \bool_if:NT \l_xgeometry_body_include_header_bool
+          { + \headsep + \headheight }
+        \bool_if:NT \l_xgeometry_body_include_footer_bool
+          { + \footskip }
+      }
   }
 \cs_new:Npn \xgeometry_margin_top: { \dim_eval:n { \topmargin + 1in } }
 \cs_new:Npn \xgeometry_margin_bottom:
