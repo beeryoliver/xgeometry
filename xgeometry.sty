@@ -229,7 +229,14 @@
       }
   }
 \cs_new:Npn \xgeometry_margin_bottom:
-  { \dim_eval:n { \paperheight - \textheight - \topmargin - 1in } }
+  {
+    \dim_eval:n
+      {
+        \paperheight - 1in - \topmargin - \headheight - \headsep - \textheight
+        \bool_if:NF \l_xgeometry_body_include_footer_bool
+          { - \footskip }
+      }
+  }
 \cs_new:Npn \xgeometry_margin_left: { \dim_eval:n { \oddsidemargin + 1in } }
 \cs_new:Npn \xgeometry_margin_right: { \dim_eval:n { \evensidemargin + 1in } }
 
