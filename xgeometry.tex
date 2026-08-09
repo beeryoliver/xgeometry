@@ -32,6 +32,19 @@ These syntaxes have the same meaning as the arguments to \cs{dimeval} and
 \cs{fpeval}, respectively, which are documented in \pkg{usrguide}.
 
 
+\section{Commands}
+\label{sec:cmds}
+
+\begin{code}{\xgeometrysetup}
+  \begin{syntax}
+    \cs{xgeometrysetup} \marg{key-value list}
+  \end{syntax}
+  Sets and processes the \pkg{xgeometry} package keys (\S\ref{sec:keys}) in
+  \meta{key-value list}.
+  % All assignments made by \cs{xgeometrysetup} are local to the current group.
+  Can be used mid-document.
+\end{code}
+
 \section{Keys}
 \label{sec:keys}
 
