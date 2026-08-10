@@ -1,7 +1,7 @@
 % Loading the class
 
 \NeedsTeXFormat{LaTeX2e}[2023-11-01]
-\ProvidesExplClass{beerydoc}{2026-07-02}{0.0.0}{}
+\ProvidesExplClass{beerydoc}{2026-08-09}{0.0.0}{}
 \prop_gput:Nnn \g_msg_module_type_prop { beerydoc } { Class }
 
 \msg_new:nnn { beerydoc } { l3kernel }
@@ -98,9 +98,9 @@
   }
 \skip_const:Nn \c_beerydoc_med_skip   { \c_beerydoc_big_skip / 2 }
 \skip_const:Nn \c_beerydoc_small_skip { \c_beerydoc_big_skip / 4 }
-\setlength \bigskipamount   { \skip_use:N \c_beerydoc_big_skip   }
-\setlength \medskipamount   { \skip_use:N \c_beerydoc_med_skip   }
-\setlength \smallskipamount { \skip_use:N \c_beerydoc_small_skip }
+\skip_set_eq:NN \bigskipamount   \c_beerydoc_big_skip
+\skip_set_eq:NN \medskipamount   \c_beerydoc_med_skip
+\skip_set_eq:NN \smallskipamount \c_beerydoc_small_skip
 \skip_log:N \c_beerydoc_big_skip
 \skip_log:N \c_beerydoc_med_skip
 \skip_log:N \c_beerydoc_small_skip
@@ -672,7 +672,7 @@
           \bool_if:NT \l__beerydoc_code_names_long_bool
             { - \l__beerydoc_code_names_dim + \marginparwidth }
         }
-      \setlength \parskip { 0pt }
+      \skip_zero:N \parskip
       \ttfamily
       \small
       \raggedright
@@ -711,8 +711,8 @@
 \vbadness = 100
 % \maxdepth = 0pt
 
-\setlength \topskip { \dim_use:N \l_fontscale_normalsize_size_dim }
-\setlength \splittopskip { \topskip }
+\skip_set:Nn \topskip { \l_fontscale_normalsize_size_dim }
+\skip_set_eq:NN \splittopskip \topskip
 
 \RequirePackage { geometry }
 \exp_args:Ne \geometry
@@ -748,9 +748,9 @@
 \RequirePackage [ skip = \skip_use:N \c_beerydoc_med_skip ] { parskip }
 % default = 0.5 \baselineskip plus 2pt
 \RequirePackage [ raggedrightboxes ] { ragged2e }
-\setlength \RaggedRightRightskip
-  { 0pt plus \dim_use:N \c_beerydoc_alphabet_dim } % default = 0pt plus 2em
-\setlength \JustifyingParindent { 2em } % default = \parindent
+% default = 0pt plus 2em
+\skip_set:Nn \RaggedRightRightskip { 0pt plus \c_beerydoc_alphabet_dim }
+\dim_set:Nn \JustifyingParindent { 2em } % default = \parindent
 \RaggedRight
 % \justifying
 \RequirePackage { letterspace }
